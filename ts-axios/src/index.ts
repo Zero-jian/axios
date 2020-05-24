@@ -1,8 +1,21 @@
-import { AxiosRequest } from "./types";
+import { AxiosRequest } from './types'
+import { bulidURL } from './helpers/url'
 import xhr from './xhr'
 
-function axiox(config: AxiosRequest): void {
-    xhr(config);
+//把参数拼接到url上，params是get参数
+function transformUrl(config: AxiosRequest): string {
+  let { params, url } = config
+  return bulidURL(url, params)
 }
 
-export default axiox;
+//处理url参数
+function processConfig(config: AxiosRequest): void {
+  config.url = transformUrl(config)
+}
+
+function axiox(config: AxiosRequest): void {
+  processConfig(config)
+  xhr(config)
+}
+
+export default axiox
