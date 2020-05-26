@@ -11,5 +11,7 @@ axios模块功能：
 
 5、Promise获取响应数据 => interface axiosPromise extends Promise<axiosResponse> => 是指axiosPromise使用Promise的数据结构，然后返回数据类型为axiosResponse   
 
+6、响应header => 处理响应的header字符串，转化成对象
+
 dev    => 开发环境
 master => 生产环境
