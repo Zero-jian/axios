@@ -5,7 +5,7 @@ import { transformData } from './helpers/data'
 export default function xhr(config: AxiosRequest): axiosPromise {
 
     return new Promise((resolve,reject) => {
-        const {url, data = null, method = 'get', headers = {}, responseType} = config;
+        const {url, data = null, method = 'get', headers = {}, responseType, timeout} = config;
 
         const request = new XMLHttpRequest();
 
@@ -14,8 +14,23 @@ export default function xhr(config: AxiosRequest): axiosPromise {
             request.responseType = responseType;
         }
 
+        if(timeout) {
+            //设置响应超时时间
+            request.timeout = timeout;
+        }
+
         // open('请求方式','请求链接', '是否异步 ? 异步 => true : 同步 => false')
         request.open(method.toUpperCase(), url, true);
+
+        //响应超时
+        request.ontimeout = () => {
+            reject(new Error(`Timeout of ${timeout} as mxceeded`));
+        }
+
+        //网络异常错误
+        request.onerror = err => {
+            reject(new Error(`网络异常出现错误：${err}`));
+        }
 
         request.onreadystatechange = function() {
             if(request.readyState !== 4) {
@@ -38,7 +53,15 @@ export default function xhr(config: AxiosRequest): axiosPromise {
                 request: request
             } 
             
-            resolve(response);
+            handleResponse(response);
+
+            function handleResponse(response: AxiosResponse) {
+                if(response.status >= 200 && response.status <= 300) {
+                    resolve(response);
+                } else {
+                    reject(new Error(`Request failed with status code ${response.status}`));
+                }
+            }
         }
 
         Object.keys(headers).forEach(name => {

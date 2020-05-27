@@ -17,7 +17,8 @@ export interface AxiosRequest {
     data?: any,
     params?: any,
     headers?: any,
-    responseType?: XMLHttpRequestResponseType
+    responseType?: XMLHttpRequestResponseType,
+    timeout?: number,
 }
 
 //响应数据类型
