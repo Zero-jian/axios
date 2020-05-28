@@ -3,6 +3,7 @@ import { bulidURL } from './helpers/url'
 import { transformRequest } from './helpers/data'
 import { processHeader } from './helpers/header'
 import xhr from './xhr'
+export * from './types'
 
 //把参数拼接到url上，params是get参数
 function transformUrl(config: AxiosRequest): string {
@@ -12,15 +13,15 @@ function transformUrl(config: AxiosRequest): string {
 
 //自动添加header参数
 function transformHeader(config: AxiosRequest): string {
-  let {headers = {}, data} = config;
-  return processHeader(headers, data);
+  let { headers = {}, data } = config
+  return processHeader(headers, data)
 }
 
 //处理url参数
 function processConfig(config: AxiosRequest): void {
   config.url = transformUrl(config)
-  config.headers = transformHeader(config);
-  config.data = transformRequest(config.data);
+  config.headers = transformHeader(config)
+  config.data = transformRequest(config.data)
 }
 
 function axiox(config: AxiosRequest): axiosPromise {
